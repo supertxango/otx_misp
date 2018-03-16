@@ -206,6 +206,7 @@ def create_events(pulse_or_list, author=False, server=False, key=False, misp=Fal
         return misp_events
 
     pulse = pulse_or_list
+    print "Creating misp event: "+pulse['name'] # ---------------------------------------
     if author:
         event_name = pulse['author_name'] + ' | ' + pulse['name']
     else:
@@ -245,6 +246,7 @@ def create_events(pulse_or_list, author=False, server=False, key=False, misp=Fal
     if misp:
         if not dedup_titles:
             event = misp.new_event(distribution, threat_level, analysis, event_name, date=event_date, published=publish)
+            print "(not dedup_titles) Created misp event: "+pulse['name'] # ------------------------------
         else:
             event = ''
             # Check if username is added to title
@@ -260,6 +262,7 @@ def create_events(pulse_or_list, author=False, server=False, key=False, misp=Fal
                 if result['message'] == "No matches.":
                     event = misp.new_event(distribution, threat_level, analysis, event_name, date=event_date,
                                            published=publish)
+                    print "(no matches) Created misp event: "+pulse['name'] # ------------------------------
             else:
                 for evt in result['response']:
                     # If it exists, set 'event' to the event
@@ -273,7 +276,8 @@ def create_events(pulse_or_list, author=False, server=False, key=False, misp=Fal
                     # Build new event
                     event = misp.new_event(distribution, threat_level, analysis, event_name, date=event_date,
                                            published=publish)
-
+                    print "(new event) Created misp event: "+pulse['name'] # ------------------------------
+                    
         time.sleep(0.2)
         if tlp:
             tag = None
@@ -418,7 +422,8 @@ def create_events(pulse_or_list, author=False, server=False, key=False, misp=Fal
 
         else:
             log.warning("Unsupported indicator type: %s" % ind_type)
-
+    print "Added attributes to: "+ pulse['name'] # ------------------------------
+    print "***" # ------------------------------
     if misp and publish:
         event['Event']['published'] = False
         misp.publish(event)
