@@ -130,7 +130,9 @@ def main(args=None):
         sys.exit(5)
 
     try:
+        print "Getting OTX pulses..." # ------------------------------
         pulses = get_pulses(config.otx, from_timestamp=config.timestamp.isoformat())
+        print "OTX pulses ready" # ------------------------------
     except InvalidAPIKey:
         log.error("Wrong API key: '{}'".format(config.otx))
         sys.exit(11)
